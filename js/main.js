@@ -52,9 +52,7 @@
         }, { threshold: 0.12 });
         revealEls.forEach(el => io.observe(el));
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // LOGICA DEL MENU LATERAL (DRAWER)
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // ── DRAWER ──
         const heartBtn      = document.getElementById('heartBtn');
         const drawer        = document.getElementById('drawer');
         const drawerOverlay = document.getElementById('drawerOverlay');
@@ -86,3 +84,48 @@
                 if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
             });
         });
+
+        // ── HIDE NAV ON SCROLL (mobile only) ──
+        (function () {
+            const nav    = document.querySelector('nav');
+            const topBar = document.querySelector('.top-bar');
+            if (!nav || !topBar) return;
+
+            function isMobile() { return window.innerWidth <= 768; }
+
+            function setup() {
+                if (isMobile()) {
+                    const tbH  = topBar.offsetHeight;
+                    const navH = nav.offsetHeight;
+                    nav.style.top = tbH + 'px';
+                    document.body.style.paddingTop = (tbH + navH) + 'px';
+                } else {
+                    nav.style.top = '';
+                    nav.style.transform = '';
+                    topBar.style.transform = '';
+                    document.body.style.paddingTop = '';
+                }
+            }
+            setup();
+            window.addEventListener('resize', setup);
+
+            let lastY   = window.scrollY;
+            let ticking = false;
+
+            function onScroll() {
+                if (!isMobile()) return;
+                const currentY  = window.scrollY;
+                const goingDown = currentY > lastY && currentY > 10;
+                const tbH = topBar.offsetHeight;
+
+                topBar.style.transform = goingDown ? 'translateY(-100%)' : 'translateY(0)';
+                nav.style.transform    = goingDown ? `translateY(-${tbH + nav.offsetHeight}px)` : 'translateY(0)';
+
+                lastY   = currentY;
+                ticking = false;
+            }
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) { requestAnimationFrame(onScroll); ticking = true; }
+            }, { passive: true });
+        })();
