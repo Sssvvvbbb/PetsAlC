@@ -33,11 +33,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/style.css">
-    <style>
-        nav, .top-bar {
-            transition: transform 0.3s ease;
-        }
-    </style>
 </head>
 <body>
 
@@ -546,32 +541,5 @@
         </div>
     </footer>
     <script src="assets/script.js"></script>
-    <script>
-        // ── HIDE NAV ON SCROLL (mobile) ──
-        (function () {
-            const nav     = document.querySelector('nav');
-            const topBar  = document.querySelector('.top-bar');
-            let lastY     = window.scrollY;
-            let ticking   = false;
-
-            function onScroll() {
-                if (window.innerWidth > 768) return; // solo mobile
-                const currentY = window.scrollY;
-                const hidden   = currentY > lastY && currentY > 60;
-
-                nav.style.transform    = hidden ? 'translateY(-100%)' : 'translateY(0)';
-                topBar.style.transform = hidden ? 'translateY(-100%)' : 'translateY(0)';
-                lastY = currentY;
-                ticking = false;
-            }
-
-            window.addEventListener('scroll', () => {
-                if (!ticking) {
-                    requestAnimationFrame(onScroll);
-                    ticking = true;
-                }
-            }, { passive: true });
-        })();
-    </script>
 </body>
 </html>
